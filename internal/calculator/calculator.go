@@ -37,7 +37,3 @@ func (c *Calculator) Compute(x, y float64, op string) (float64, error) {
 func (c *Calculator) History() []string {
 	return c.history
 }
-
-func main() {
-	fmt.Println("0")
-}
