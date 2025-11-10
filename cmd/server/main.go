@@ -9,8 +9,10 @@ import (
 )
 
 func main() {
-	calc := calculator.New()
-	handler := api.NewHandler(calc)
+	BasicCalc := calculator.NewBasic()
+	RPNCalc := calculator.NewRPN()
+	calcs := []calculator.Calculator{BasicCalc, RPNCalc}
+	handler := api.NewHandler(calcs)
 
 	http.HandleFunc("/api/v1/calc", handler.ComputeHandler)
 	http.HandleFunc("/api/v1/history", handler.HistoryHandler)

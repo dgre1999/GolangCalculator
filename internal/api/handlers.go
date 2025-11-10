@@ -8,11 +8,20 @@ import (
 )
 
 type Handler struct {
-	calc *calculator.Calculator
+	calcs map[string]calculator.Calculator
 }
 
-func NewHandler(calc *calculator.Calculator) *Handler {
-	return &Handler{calc: calc}
+func NewHandler(calcsSlice []calculator.Calculator) *Handler {
+	calcs := make(map[string]calculator.Calculator)
+	for _, calc := range calcsSlice {
+		switch c := calc.(type) {
+		case *calculator.BasicCalculator:
+			calcs["basic"] = c
+		case *calculator.RPNCalculator:
+			calcs["rpn"] = c
+		}
+	}
+	return &Handler{calcs: calcs}
 }
 
 func (h *Handler) ComputeHandler(w http.ResponseWriter, r *http.Request) {
@@ -22,17 +31,16 @@ func (h *Handler) ComputeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var req struct {
-		X  float64 `json:"x"`
-		Y  float64 `json:"y"`
-		Op string  `json:"op"`
+		Type       string `json:"type"`
+		Expression string `json:"expression"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
-	res, err := h.calc.Compute(req.X, req.Y, req.Op)
+	calc := h.calcs[req.Type]
+	res, err := calc.Compute(req.Expression)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -46,5 +54,10 @@ func (h *Handler) HistoryHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	json.NewEncoder(w).Encode(h.calc.History())
+	var combinedHistory []string
+	for _, calc := range h.calcs {
+		combinedHistory = append(combinedHistory, calc.History()...)
+	}
+
+	json.NewEncoder(w).Encode(combinedHistory)
 }
