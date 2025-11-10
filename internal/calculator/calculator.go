@@ -28,7 +28,10 @@ func NewRPN() *RPNCalculator {
 
 func (c *BasicCalculator) Compute(expression string) (float64, error) {
 	var operands = strings.Fields(expression)
-	result, nil := EvalExpression(operands)
+	result, err := EvalExpression(operands)
+	if err != nil {
+		return 0, err
+	}
 	expr := fmt.Sprintf("%s %s %s = %f", operands[0], operands[1], operands[2], result)
 	c.history = append(c.history, expr)
 	return result, nil

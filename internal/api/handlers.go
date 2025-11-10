@@ -39,6 +39,12 @@ func (h *Handler) ComputeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	if req.Type != "basic" && req.Type != "rpn" {
+		http.Error(w, "invalid calculator type", http.StatusBadRequest)
+		return
+	}
+
 	calc := h.calcs[req.Type]
 	res, err := calc.Compute(req.Expression)
 	if err != nil {
