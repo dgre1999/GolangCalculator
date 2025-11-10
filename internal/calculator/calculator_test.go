@@ -18,7 +18,7 @@ func TestBasicCompute(t *testing.T) {
 	for _, tt := range tests {
 		res, err := c.Compute(tt.expression)
 		if err != nil {
-			t.Fatalf("unexpected error: %v", err)
+			t.Fatalf("unexpected error: %v %v", err, tt.expression)
 		}
 		if res != tt.expect {
 			t.Errorf("expected %v, got %v", tt.expect, res)

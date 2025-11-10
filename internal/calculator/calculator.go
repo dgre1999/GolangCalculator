@@ -27,6 +27,10 @@ func NewRPN() *RPNCalculator {
 }
 
 func (c *BasicCalculator) Compute(expression string) (float64, error) {
+	calcRegex := expressionRegex()
+	if !calcRegex.MatchString(expression) {
+		return 0, fmt.Errorf("invalid expression format")
+	}
 	var operands = strings.Fields(expression)
 	result, err := EvalExpression(operands)
 	if err != nil {
@@ -42,6 +46,10 @@ func (c *BasicCalculator) History() []string {
 }
 
 func (c *RPNCalculator) Compute(expression string) (float64, error) {
+	calcRegex := expressionRegex()
+	if !calcRegex.MatchString(expression) {
+		return 0, fmt.Errorf("invalid expression format")
+	}
 	operands := strings.Fields(expression)
 	postfix := infixToPostfix(operands)
 	result := evalPostfix(postfix)
