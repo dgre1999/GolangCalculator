@@ -24,7 +24,20 @@ func NewHandler(calcsSlice []calculator.Calculator) *Handler {
 	return &Handler{calcs: calcs}
 }
 
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "http://127.0.0.1:5500")
+	(*w).Header().Set("Vary", "Origin")
+	(*w).Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+}
+
 func (h *Handler) ComputeHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
+
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
 	if r.Method != http.MethodPost {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -56,6 +69,7 @@ func (h *Handler) ComputeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) HistoryHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	if r.Method != http.MethodGet {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		return

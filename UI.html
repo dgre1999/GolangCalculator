@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>API Calculator</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 40px;
+    }
+    .calculator {
+      border: 1px solid #aaa;
+      padding: 20px;
+      border-radius: 8px;
+      width: 220px;
+      text-align: center;
+    }
+    input {
+      width: 100%;
+      font-size: 18px;
+      padding: 10px;
+      margin-bottom: 10px;
+      text-align: right;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+    }
+    button {
+      padding: 10px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    #history {
+      margin-top: 20px;
+      width: 220px;
+      text-align: left;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator">
+    <input type="text" id="expression" placeholder="Enter expression" />
+    <div class="buttons">
+      <button onclick="append('7')">7</button>
+      <button onclick="append('8')">8</button>
+      <button onclick="append('9')">9</button>
+      <button onclick="append(' / ')">÷</button>
+
+      <button onclick="append('4')">4</button>
+      <button onclick="append('5')">5</button>
+      <button onclick="append('6')">6</button>
+      <button onclick="append(' * ')">×</button>
+
+      <button onclick="append('1')">1</button>
+      <button onclick="append('2')">2</button>
+      <button onclick="append('3')">3</button>
+      <button onclick="append(' - ')">−</button>
+
+      <button onclick="append('0')">0</button>
+      <button onclick="append('.')">.</button>
+      <button onclick="calculate()">=</button>
+      <button onclick="append(' + ')">+</button>
+    </div>
+    <button style="margin-top:10px;width:100%;" onclick="clearInput()">Clear</button>
+  </div>
+
+  <div id="history">
+    <h3>History</h3>
+    <ul id="history-list"></ul>
+  </div>
+
+  <script>
+    const apiBase = "http://127.0.0.1:8080/api/v1"; // change to your API base URL
+
+    const expressionInput = document.getElementById("expression");
+    const historyList = document.getElementById("history-list");
+
+    function append(value) {
+      expressionInput.value += value;
+    }
+
+    function clearInput() {
+      expressionInput.value = "";
+    }
+
+    function isBasic(expression) {
+        const count = (expression.match(/\s/g) || []).length;
+        if (count === 2) {
+            return true;
+        }
+        return false;
+    }
+
+    async function calculate() {
+      const expression = expressionInput.value.trim();
+      console.log("Calculating:", expression);
+      console.log(expression.length);
+      if (!expression) return;
+      if (isBasic(expression)) {
+        console.log("testing basic");
+        const response = await fetch(`${apiBase}/calc`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+                type: "basic",
+                expression: expression}),
+          });
+          data = await response.json();
+      } else {
+        console.log("testing rpn");
+        const response = await fetch(`${apiBase}/calc`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+                type: "rpn",
+                expression: expression}),
+          });
+          data = await response.json();
+      }
+      expressionInput.value = data.result ?? "Error";
+
+      // refresh history
+      loadHistory();
+    }
+
+    async function loadHistory() {
+      const res = await fetch(`${apiBase}/history`);
+      const history = await res.json();
+      console.log(history);
+
+      historyList.innerHTML = "";
+      for (const item of history) {
+        console.log(item);
+        const li = document.createElement("li");
+        li.textContent = `${item}`;;
+        historyList.appendChild(li);
+      }
+    }
+
+    // Allow Enter key to trigger calculate()
+    expressionInput.addEventListener("keydown", e => {
+      if (e.key === "Enter") calculate();
+    });
+
+    // Load history on startup
+    //loadHistory();
+  </script>
+
+</body>
+</html>
