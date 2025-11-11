@@ -1,11 +1,23 @@
 package api
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"net/http"
+	"slices"
 
 	"github.com/dgre1999/GolangCalculator/internal/calculator"
 )
+
+var users = []string{
+	"daniel",
+	"redia",
+}
+var passmap = map[string]string{
+	"daniel": "8600b8bb184cfa27785d8b5fdd43db4c4a242837b3fcd998524639d3e25f1ca2",
+	"redia":  "85bbff542451a21a03a731657ed2e603a551aab6c319fe535ed34d0d80c7344e",
+}
 
 type Handler struct {
 	calcs map[string]calculator.Calculator
@@ -44,12 +56,19 @@ func (h *Handler) ComputeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var req struct {
+		Username   string `json:"username"`
+		Password   string `json:"password"`
 		Type       string `json:"type"`
 		Expression string `json:"expression"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if !validateUserAndPass(req.Username, req.Password) {
+		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
 	}
 
@@ -80,4 +99,17 @@ func (h *Handler) HistoryHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(combinedHistory)
+}
+
+func getSHA256Hash(input string) string {
+	hash := sha256.New()
+	hash.Write([]byte(input))
+	return hex.EncodeToString(hash.Sum(nil))
+}
+
+func validateUserAndPass(user, pass string) bool {
+	if slices.Contains(users, user) && passmap[user] == getSHA256Hash(pass) {
+		return true
+	}
+	return false
 }

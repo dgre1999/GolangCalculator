@@ -44,7 +44,10 @@
   </style>
 </head>
 <body>
-
+    <div class="Auth">
+        <input type="text" id="username" placeholder="Enter username">
+        <input type="text" id="password" placeholder="Enter password">
+    </div>
   <div class="calculator">
     <input type="text" id="expression" placeholder="Enter expression" />
     <div class="buttons">
@@ -97,6 +100,14 @@
         }
         return false;
     }
+    // Returns the username in the corresponding textfield
+    function getUsername() {
+        return document.getElementById("username").value;
+    }
+    // Returns the password in the corresponding textfield
+    function getPassword() {
+        return document.getElementById("password").value;
+    }
     // Sends expression to API and updates input with result. A bit of code duplication with data = await.response.json();, as I was wrangling with the code a bit.
     async function calculate() {
       const expression = expressionInput.value.trim();
@@ -109,7 +120,9 @@
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 
-                type: "basic",
+                username: getUsername(),
+                password: getPassword(),
+                type: "basic", //code duplication, fix later
                 expression: expression}),
           });
           data = await response.json();
@@ -118,7 +131,9 @@
         const response = await fetch(`${apiBase}/calc`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
+                username: getUsername(),
+                password: getPassword(), 
                 type: "rpn",
                 expression: expression}),
           });
