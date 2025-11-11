@@ -77,19 +77,19 @@
   </div>
 
   <script>
-    const apiBase = "https://golangcalculator-1090039448189.europe-west1.run.app/api/v1"; // change to your API base URL
+    const apiBase = "https://golangcalculator-1090039448189.europe-west1.run.app/api/v1"; // API URL
 
     const expressionInput = document.getElementById("expression");
     const historyList = document.getElementById("history-list");
-
+    // Used to append symbols to input string
     function append(value) {
       expressionInput.value += value;
     }
-
+    // Clears text input
     function clearInput() {
       expressionInput.value = "";
     }
-
+    // Checks if there's exactly two spaces in the expression, as an indicator for a basic expression
     function isBasic(expression) {
         const count = (expression.match(/\s/g) || []).length;
         if (count === 2) {
@@ -97,7 +97,7 @@
         }
         return false;
     }
-
+    // Sends expression to API and updates input with result. A bit of code duplication with data = await.response.json();, as I was wrangling with the code a bit.
     async function calculate() {
       const expression = expressionInput.value.trim();
       console.log("Calculating:", expression);
@@ -129,7 +129,7 @@
       // refresh history
       loadHistory();
     }
-
+    // Loads calculation history from API and displays it
     async function loadHistory() {
       const res = await fetch(`${apiBase}/history`);
       const history = await res.json();
@@ -149,8 +149,6 @@
       if (e.key === "Enter") calculate();
     });
 
-    // Load history on startup
-    //loadHistory();
   </script>
 
 </body>
