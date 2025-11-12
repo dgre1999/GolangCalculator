@@ -43,7 +43,7 @@ func NewHandler(calcsSlice []calculator.Calculator) *Handler {
 
 // Enables CORS for the specified origin. If not enabled, gives CORS errors in browser
 func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "http://127.0.0.1:5500")
+	(*w).Header().Set("Access-Control-Allow-Origin", "https://fir-testing-323bd.web.app/")
 	(*w).Header().Set("Vary", "Origin")
 	(*w).Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
