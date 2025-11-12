@@ -6,6 +6,7 @@ import (
 	"strconv"
 )
 
+// Precedence used to convert infix to postfix notation / Reverse Polish Notation
 var precedence = map[string]int{
 	"+": 1, "plus": 1, "add": 1,
 	"-": 1, "minus": 1, "subtract": 1,
@@ -15,10 +16,12 @@ var precedence = map[string]int{
 	"^": 3, "power": 3,
 }
 
+// Right associative operators
 var rightAssoc = map[string]bool{
 	"^": true,
 }
 
+// Converts infix expression to postfix expression using the Shunting Yard algorithm
 func infixToPostfix(inputs []string) []string {
 	var output []string
 	var stack []string
@@ -81,6 +84,7 @@ func infixToPostfix(inputs []string) []string {
 	return output
 }
 
+// Evaluates a postfix expression
 func evalPostfix(inputs []string) float64 {
 	var stack []float64
 	operandLookup := initMap()
@@ -123,6 +127,7 @@ func evalPostfix(inputs []string) float64 {
 	return stack[0]
 }
 
+// Number check to help with infix to postfix conversion
 func isNumber(s string) bool {
 	_, err := strconv.ParseFloat(s, 64)
 	return err == nil

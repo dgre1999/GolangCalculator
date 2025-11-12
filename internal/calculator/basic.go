@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+// Evaluates an expression for the BasicCalculator type. Moved to separate file to avoid a bloated calculator file
 func EvalExpression(expression []string) (float64, error) {
 	operandLookup := initMap()
 	if len(expression) != 3 {
