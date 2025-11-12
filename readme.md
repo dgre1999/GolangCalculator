@@ -5,6 +5,8 @@ The API can be interacted with as follows: The API has 2 endpoints, api/v1/calc 
 
 Alternatively, you can visit https://fir-testing-323bd.web.app/, which is a firebase hosted webpage of the simple UI found in UI.html, which will then send HTTP requests to the api hosted on Google Cloud Run.
 
+Tests are found in calculator_test.go
+
 ## Issues / notes
 I use a regex to help check the validity of the expressions, this is not a fully comprehensive regex. It only checks if the symbols are valid. In an ideal world, it would also check structure of the expression, but I would need to read up a bit more on that (which I will after), but I decided to keep it as is for now, even if it's not perfect, to show I know of regular expressions. 
 
