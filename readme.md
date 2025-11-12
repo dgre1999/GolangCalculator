@@ -5,6 +5,8 @@ The API can be interacted with as follows: The API has 2 endpoints, api/v1/calc 
 
 Alternatively, you can visit https://fir-testing-323bd.web.app/, which is a firebase hosted webpage of the simple UI found in UI.html, which will then send HTTP requests to the api hosted on Google Cloud Run.
 
+I will send valid authentication pairs in the mail I send to you. In the repo you will find valid usernames, and hashed valid passwords. Ideally, I wanted a way to store the credentials outside of the repo, but was drawing a blank on how to. My thought was setting up a small database to store username hashed password pairs, but felt that with the time I have left, that would be a bit overkill to begin on doing. 
+
 Tests are found in calculator_test.go
 
 ## Issues / notes
