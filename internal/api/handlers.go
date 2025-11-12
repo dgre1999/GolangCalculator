@@ -15,8 +15,8 @@ var users = []string{
 	"redia",
 }
 var passmap = map[string]string{
-	"daniel": "8600b8bb184cfa27785d8b5fdd43db4c4a242837b3fcd998524639d3e25f1ca2",
-	"redia":  "85bbff542451a21a03a731657ed2e603a551aab6c319fe535ed34d0d80c7344e",
+	"daniel": "bc46a8a0c0be4569980c46022ed56596eca1b2c50b3b2fb57c88383519c92c7c",
+	"redia":  "2bfc003061a6a8f15f0705fbd4151ac167d405595c83e0548c872fbee69234f0",
 }
 
 type Handler struct {
