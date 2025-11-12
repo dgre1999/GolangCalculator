@@ -42,16 +42,21 @@ func NewHandler(calcsSlice []calculator.Calculator) *Handler {
 }
 
 // Enables CORS for the specified origin. If not enabled, gives CORS errors in browser
-func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "https://fir-testing-323bd.web.app/")
-	(*w).Header().Set("Vary", "Origin")
-	(*w).Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+func enableCors(w *http.ResponseWriter, origin string) {
+	allowedOrigins := []string{"https://fir-testing-323bd.web.app/", "http://127.0.0.1:5500"}
+	for _, o := range allowedOrigins {
+		if o == origin {
+			(*w).Header().Set("Access-Control-Allow-Origin", origin)
+			(*w).Header().Set("Vary", "Origin")
+			(*w).Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+			(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		}
+	}
 }
 
 // Handles the HTTP requests to the compute function
 func (h *Handler) ComputeHandler(w http.ResponseWriter, r *http.Request) {
-	enableCors(&w)
+	enableCors(&w, r.Header.Get("Origin"))
 	// Handle preflight OPTIONS request, if not handled, gives CORS errors in browser
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
@@ -97,7 +102,7 @@ func (h *Handler) ComputeHandler(w http.ResponseWriter, r *http.Request) {
 
 // Handles the HTTP requests for the History function
 func (h *Handler) HistoryHandler(w http.ResponseWriter, r *http.Request) {
-	enableCors(&w)
+	enableCors(&w, r.Header.Get("Origin"))
 	// Checks if GET, else stop
 	if r.Method != http.MethodGet {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
