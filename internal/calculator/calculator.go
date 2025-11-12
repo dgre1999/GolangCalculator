@@ -14,16 +14,19 @@ type BasicCalculator struct {
 	history []string
 }
 
-func NewBasic() *BasicCalculator {
-	return &BasicCalculator{history: []string{}}
+func NewCalculator(version string) (Calculator, error) { // Factory-esque method?
+	switch version {
+	case "basic":
+		return &BasicCalculator{history: []string{}}, nil
+	case "rpn":
+		return &RPNCalculator{history: []string{}}, nil
+	default:
+		return nil, fmt.Errorf("unsupported calculator version: %s", version)
+	}
 }
 
 type RPNCalculator struct {
 	history []string
-}
-
-func NewRPN() *RPNCalculator {
-	return &RPNCalculator{history: []string{}}
 }
 
 func (c *BasicCalculator) Compute(expression string) (float64, error) {

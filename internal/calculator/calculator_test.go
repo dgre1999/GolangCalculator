@@ -3,7 +3,7 @@ package calculator
 import "testing"
 
 func TestBasicCompute(t *testing.T) {
-	c := NewBasic()
+	c, _ := NewCalculator("basic")
 
 	tests := []struct {
 		expression string
@@ -27,7 +27,7 @@ func TestBasicCompute(t *testing.T) {
 }
 
 func TestRPNCompute(t *testing.T) {
-	c := NewRPN()
+	c, _ := NewCalculator("rpn")
 
 	tests := []struct {
 		expression string

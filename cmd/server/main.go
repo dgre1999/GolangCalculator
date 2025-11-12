@@ -9,8 +9,8 @@ import (
 )
 
 func main() {
-	BasicCalc := calculator.NewBasic()
-	RPNCalc := calculator.NewRPN()
+	BasicCalc, _ := calculator.NewCalculator("basic")
+	RPNCalc, _ := calculator.NewCalculator("rpn")
 	calcs := []calculator.Calculator{BasicCalc, RPNCalc}
 	handler := api.NewHandler(calcs)
 
