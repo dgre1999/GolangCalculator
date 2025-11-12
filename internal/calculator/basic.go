@@ -20,18 +20,35 @@ func EvalExpression(expression []string) (float64, error) {
 	var result float64
 	switch operandLookup[op] {
 	case "+":
-		result = x + y
+		result = Add(x, y)
 	case "-":
-		result = x - y
+		result = Subtract(x, y)
 	case "*":
-		result = x * y
+		result = Multiply(x, y)
 	case "/":
-		if y == 0 {
-			return 0, fmt.Errorf("division by zero")
-		}
-		result = x / y
+		result, _ = Divide(x, y)
 	default:
 		return 0, fmt.Errorf("unsupported operation: %s", op)
 	}
 	return result, nil
+}
+
+// Basic arithmetic operations
+func Add(a, b float64) float64 {
+	return a + b
+}
+
+func Subtract(a, b float64) float64 {
+	return a - b
+}
+
+func Multiply(a, b float64) float64 {
+	return a * b
+}
+
+func Divide(a, b float64) (float64, error) {
+	if b == 0 {
+		return 0, fmt.Errorf("division by zero")
+	}
+	return a / b, nil
 }

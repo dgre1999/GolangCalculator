@@ -93,33 +93,29 @@ func evalPostfix(inputs []string) float64 {
 			n, _ := strconv.ParseFloat(input, 64)
 			stack = append(stack, n)
 		} else {
-			b := stack[len(stack)-1]
-			a := stack[len(stack)-2]
+			y := stack[len(stack)-1]
+			x := stack[len(stack)-2]
 			stack = stack[:len(stack)-2]
 
 			switch operandLookup[input] {
 			case "+":
-				stack = append(stack, a+b)
+				stack = append(stack, Add(x, y))
 			case "-":
-				stack = append(stack, a-b)
+				stack = append(stack, Subtract(x, y))
 			case "*":
-				stack = append(stack, a*b)
+				stack = append(stack, Multiply(x, y))
 			case "/":
-				if b == 0 {
-					fmt.Println("Error: Division by zero")
-					return 0
-				} else {
-					stack = append(stack, a/b)
-				}
+				temp, _ := Divide(x, y)
+				stack = append(stack, temp)
 			case "%":
-				if b == 0 {
+				if y == 0 {
 					fmt.Println("Error: Division by zero")
 					return 0
 				} else {
-					stack = append(stack, math.Mod(a, b))
+					stack = append(stack, math.Mod(x, y))
 				}
 			case "^":
-				stack = append(stack, math.Pow(a, b))
+				stack = append(stack, math.Pow(x, y))
 			}
 		}
 
