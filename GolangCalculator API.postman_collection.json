@@ -1,0 +1,106 @@
+{
+	"info": {
+		"_postman_id": "094948ca-e901-42b3-8fa8-8fbff491223d",
+		"name": "GolangCalculator API",
+		"description": "REST API for an overengineered calculator, capable of calculating and showing a calculation history, implemented in Go and deployed to Google Cloud Run",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49886029",
+		"_collection_link": "https://dgre1999-4723594.postman.co/workspace/Daniel-Greve's-Workspace~59903426-57ec-463f-8883-a289299a50f7/collection/49886029-094948ca-e901-42b3-8fa8-8fbff491223d?action=share&source=collection_link&creator=49886029"
+	},
+	"item": [
+		{
+			"name": "History",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://golangcalculator-1090039448189.europe-west1.run.app/api/v1/history",
+					"protocol": "https",
+					"host": [
+						"golangcalculator-1090039448189",
+						"europe-west1",
+						"run",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"history"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RPN Calculation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\":\"rpn\",\r\n    \"expression\": \"2 plus 5 - 10 times -5\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "https://golangcalculator-1090039448189.europe-west1.run.app/api/v1/calc",
+					"protocol": "https",
+					"host": [
+						"golangcalculator-1090039448189",
+						"europe-west1",
+						"run",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"calc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Basic Calculation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"basic\",\r\n    \"expression\": \"2 + 5\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://golangcalculator-1090039448189.europe-west1.run.app/api/v1/calc",
+					"protocol": "https",
+					"host": [
+						"golangcalculator-1090039448189",
+						"europe-west1",
+						"run",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"calc"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
